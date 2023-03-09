@@ -1,0 +1,10 @@
+[custom.all.Complex]
+type = "local"
+path = "."
+ipkg = "Complex.ipkg"
+test = "test/test.ipkg"
+
+[custom.all.Complex-test]
+type = "local"
+path = "test"
+ipkg = "test.ipkg"
