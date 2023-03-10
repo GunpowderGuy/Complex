@@ -1,4 +1,4 @@
-package Complex-test
+package complex-test
 version = 0.1.0
 authors = "GunpowderGuy"
 -- maintainers =
@@ -22,7 +22,7 @@ authors = "GunpowderGuy"
 main = Main
 
 -- name of executable
-executable = "Complex-test"
+executable = "complex-test"
 -- opts =
 sourcedir = "src"
 -- builddir =

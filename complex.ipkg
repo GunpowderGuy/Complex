@@ -1,4 +1,4 @@
-package Complex
+package complex
 version = 0.1.0
 authors = "GunpowderGuy"
 -- maintainers =

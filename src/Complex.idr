@@ -5,18 +5,24 @@ module Complex
 test : String
 test = "Hello from Idris2!"
 
-export
+--data PositiveDouble : Type where
+--MkPositiveDouble : Double ** (gte 0.0) -> PositiveDouble
+
+public export
 record LateralN where
   constructor LN
   magnitud: Double
   angulo: Double
 
-cartesiano : LateralN -> Pair Double Double
+Cartesiano : Type
+Cartesiano = Pair Double Double
+
+cartesiano : LateralN -> Cartesiano
 cartesiano a = MkPair (a.magnitud * cos a.angulo) (a.magnitud * sin a.angulo)
 
-Polar : Pair Double Double -> LateralN
-Polar (MkPair a b) = LN (a*a + b*b) (atan (b/a))
-
+Polar : Cartesiano -> LateralN
+Polar (MkPair a 0) = LN (a*a) (if (a >= 0) then 0 else pi)
+Polar (MkPair a b) = LN (a*a + b*b) (atan(b/a))
 
 public export
 Num LateralN where
@@ -26,8 +32,8 @@ Num LateralN where
         suma := ( realx + imy , realx + imy )
       in
     Polar suma
-  (*) varx y = LN (varx.magnitud  * y.magnitud) ( varx.angulo * varx.angulo )
-  fromInteger var = LN (cast var) 0
+  (*) varx y = LN (varx.magnitud  * y.magnitud) ( varx.angulo + varx.angulo )
+  fromInteger var = Polar (cast var,0)
 
 
 public export
@@ -44,7 +50,8 @@ Neg LateralN where
 public export 
 Fractional LateralN where 
     (/) x y = LN (x.magnitud / y.magnitud) (x.angulo - y.angulo)
-    recip  x = LN (recip x.magnitud) x.angulo
+    recip  x = LN (recip x.magnitud) x.angulo 
+    -- tambien se invierte el simbolo del angulo pero creo que no tiene efecto
 
 
 public export
@@ -74,11 +81,10 @@ exp : LateralN -> LateralN
 exp x =
   let r = x.magnitud
       theta = x.angulo
-      exp_r = exp r
       cos_theta = cos theta
       sin_theta = sin theta
-      re = exp_r * cos_theta
-      im = exp_r * sin_theta
+      re = exp r * cos_theta
+      im = exp r * sin_theta
   in Polar (re, im)
 
 
@@ -90,5 +96,4 @@ complexPow r1 theta1 r2 theta2 =
 
 
 pow : LateralN -> LateralN -> LateralN
-pow x y = LN (pow x.magnitud y.magnitud) (
-  y.magnitud * x.angulo + x.angulo)
+pow x y = LN ( pow x.magnitud y.magnitud * exp (-x.angulo*y.angulo)) ( y.magnitud * x.angulo + x.angulo * y.magnitud) -- no se si necesito el - 
